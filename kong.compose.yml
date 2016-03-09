@@ -1,0 +1,17 @@
+cassandra:
+  image: cassandra:2.2.5
+  ports:
+    - "9042:9042"
+api-gateway:
+  image: mashape/kong
+  ports:
+    - "8000:8000"
+    - "8443:8443"
+    - "8001:8001"
+    - "7946:7946"
+    - "7946:7946/udp"
+  links:
+    - cassandra
+  security_opt:
+    - seccomp:unconfined
+  command: sh -c 'until nc --recv-only -i 0.1 cassandra 9042 2>&1 >/dev/null|grep timeout >/dev/null; do :; done; kong start && tail -f /usr/local/kong/logs/error.log'
