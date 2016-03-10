@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <link href="/static/css/main.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <ul id="messages"></ul>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      var socket = io();
+      var $messages = $('#messages');
+      $('form input').focus();
+      $('form').submit(function(){
+        socket.emit('chat message', $('#m').val());
+        $('#m').val('');
+        return false;
+      });
+
+      var displayMessage = function(data) {
+        var ele = $('<li>');
+        ele.append($('<strong>').text(data.user.username+': '));
+        ele.append($('<span>').text(data.message));
+        $messages.append(ele);
+      };
+
+      var displayUserAction = function(data) {
+        $messages.append($('<li>').text(data.user.username+' '+data.message));
+      };
+
+      socket.on('chat message', displayMessage);
+
+      socket.on('user action', displayUserAction);
+    </script>
+  </body>
+</html>

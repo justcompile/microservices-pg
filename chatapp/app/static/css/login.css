@@ -1,0 +1,13 @@
+@media (min-width: 768px) {
+  .container {
+    max-width: 730px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-top: 10%;
+    padding: 0 20px 20px;
+  }
+
+  form {
+
+  }
+}
